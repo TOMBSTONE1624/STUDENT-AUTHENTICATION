@@ -1,0 +1,209 @@
+# ================== BEEP FUNCTION ==================
+def beep():
+    try:
+        import winsound
+        winsound.Beep(1000, 300)
+    except:
+        print('\a', end='')
+
+
+# ================== STUDENT DATA ==================
+students = []
+
+
+# ================== HELPER FUNCTIONS ==================
+def get_alphanumeric_roll():
+    while True:
+        roll = input("Enter Roll No (alphanumeric): ").strip()
+        if roll.isalnum():
+            return roll.upper()
+        else:
+            print(" Roll No must contain only letters and numbers")
+
+
+# ================== MAIN FUNCTIONS ==================
+def add_student():
+    roll = get_alphanumeric_roll()
+    name = input("Enter Name: ").strip()
+
+    marks = []
+    for i in range(1, 4):
+        while True:
+            try:
+                m = int(input(f"Enter marks for Subject {i}: "))
+                if 0 <= m <= 100:
+                    marks.append(m)
+                    break
+                else:
+                    print(" Marks must be between 0 and 100")
+            except ValueError:
+                print(" Enter a valid number")
+
+    students.append({
+        "roll": roll,
+        "name": name,
+        "marks": marks,
+        "total": sum(marks)
+    })
+
+    print(" Student Added Successfully!")
+
+
+def show_students():
+    if not students:
+        print("No Records Found")
+        return
+    for s in students:
+        print(s)
+
+
+def search_student():
+    roll = input("Enter Roll No to search: ").strip().upper()
+    for s in students:
+        if s["roll"] == roll:
+            print(s)
+            return
+    print(" Student Not Found")
+
+
+def result_all():
+    for s in students:
+        print(f"{s['name']} → Total: {s['total']}")
+
+
+def delete_student():
+    roll = input("Enter Roll No to delete: ").strip().upper()
+    for s in students:
+        if s["roll"] == roll:
+            students.remove(s)
+            print(" Student Deleted")
+            return
+    print(" Student Not Found")
+
+
+def update_marks():
+    roll = input("Enter Roll No: ").strip().upper()
+    for s in students:
+        if s["roll"] == roll:
+            marks = []
+            for i in range(1, 4):
+                while True:
+                    try:
+                        m = int(input(f"Enter new marks for Subject {i}: "))
+                        if 0 <= m <= 100:
+                            marks.append(m)
+                            break
+                        else:
+                            print(" Marks must be between 0 and 100")
+                    except ValueError:
+                        print(" Enter a valid number")
+
+            s["marks"] = marks
+            s["total"] = sum(marks)
+            print("✅ Marks Updated")
+            return
+    print(" Student Not Found")
+
+
+def show_topper():
+    if not students:
+        print("No Records")
+        return
+    topper = max(students, key=lambda x: x["total"])
+    print(" Topper:", topper)
+
+
+def count_students():
+    print("Total Students:", len(students))
+
+
+def sort_by_marks():
+    for s in sorted(students, key=lambda x: x["total"], reverse=True):
+        print(s)
+
+
+def class_average():
+    if not students:
+        print("No Records")
+        return
+    avg = sum(s["total"] for s in students) / len(students)
+    print("Class Average:", avg)
+
+
+def pass_fail():
+    for s in students:
+        status = "Pass" if s["total"] >= 120 else "Fail"
+        print(s["name"], "→", status)
+
+
+def student_grade():
+    for s in students:
+        total = s["total"]
+        if total >= 270:
+            grade = "A"
+        elif total >= 240:
+            grade = "B"
+        elif total >= 200:
+            grade = "C"
+        else:
+            grade = "D"
+        print(s["name"], "→ Grade:", grade)
+
+
+def clear_records():
+    students.clear()
+    print("🧹 All Records Cleared")
+
+
+# ================== MAIN MENU ==================
+while True:
+    print("\n=====  Welcome  =====")
+    print("1. Add Student")
+    print("2. Show Students")
+    print("3. Search Student")
+    print("4. Result (All)")
+    print("5. Delete Student")
+    print("6. Update Marks")
+    print("7. Show Topper")
+    print("8. Count Students")
+    print("9. Sort by Total Marks")
+    print("10. Class Average")
+    print("11. Pass/Fail List")
+    print("12. Student Grade")
+    print("13. Clear All Records")
+    print("14. Exit")
+
+    choice = input("Enter choice: ")
+    beep()
+
+    if choice == '1':
+        add_student()
+    elif choice == '2':
+        show_students()
+    elif choice == '3':
+        search_student()
+    elif choice == '4':
+        result_all()
+    elif choice == '5':
+        delete_student()
+    elif choice == '6':
+        update_marks()
+    elif choice == '7':
+        show_topper()
+    elif choice == '8':
+        count_students()
+    elif choice == '9':
+        sort_by_marks()
+    elif choice == '10':
+        class_average()
+    elif choice == '11':
+        pass_fail()
+    elif choice == '12':
+        student_grade()
+    elif choice == '13':
+        clear_records()
+    elif choice == '14':
+        print("=== Session Ended. Please Run the code again ===")
+        break
+    else:
+        print("Invalid Choice")
